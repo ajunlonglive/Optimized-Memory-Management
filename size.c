@@ -5,7 +5,6 @@ unsigned char class_array_[K_CLASS_ARRAY_SIZE];
 size_t class_to_size_[K_NUM_CLASSES];           
 size_t class_to_pages_[K_NUM_CLASSES];
 
-
 //计算 class_array_ 的索引值
 static inline int class_index(int s)
 {
@@ -19,24 +18,24 @@ static inline int class_index(int s)
 }
 
 
-inline int size_class(int size)
+size_t size_to_class(int size)
 {
-    return class_array_[class_index(size)];
+    return class_array_[ class_index(size) ];
 }
 
-inline size_t byte_size_for_class(size_t n)
+size_t class_to_size(int class_index)
 {
-    return class_to_size_[n];
+    return class_to_size_[class_index];
 }
 
-inline size_t class_to_size(size_t n)
-{
-    return class_to_size_[n];
-}
-
-inline size_t class_to_pages(size_t n)
+size_t class_to_pages(size_t n)
 {
     return class_to_pages_[n];
+}
+
+size_t alignment_size(int size)//转换为对齐长度
+{
+    return class_to_size_[class_array_[ class_index(size) ]];
 }
 
 //返回size值的最高位1的位置
@@ -54,17 +53,16 @@ static inline int LgFloor(size_t n)
             log += shift;
         }
     }
-    ASSERT(n == 1);
     
     return (log);
 }
 
-int alignment_for_size(size_t size) {
+static int alignment_for_size(size_t size) {
     int alignment = K_ALIGNMENT_SIZE;
 
-    if (size > K_MAX_SIZE) {       // [256*1024, ...]
+    if (size > K_MAX_SIZE) {       // [40*1024, ...]
         alignment = K_PAGE_SIZE;
-    } else if (size >= 128) {      // [128, 256*1024]
+    } else if (size >= 128) {      // [128, 40*1024]
         alignment = (1 << LgFloor(size)) / 8;
     } else if (size >= 16)  {      //  [0, 16]
         alignment = 16;
@@ -73,11 +71,12 @@ int alignment_for_size(size_t size) {
     if (alignment > K_PAGE_SIZE) {
         alignment = K_PAGE_SIZE;
     }
+    ASSERT(alignment);
 
     return alignment;
 }
 
-int num_move_size(size_t size)
+static int num_move_size(size_t size)
 {
     int num;
 
@@ -94,7 +93,7 @@ int num_move_size(size_t size)
     return num;
 }
 
-void init_size_map()
+extern void init_size_map()
 {
     int sc = 1;
     int alignment = K_ALIGNMENT_SIZE;
@@ -133,21 +132,21 @@ void init_size_map()
     for (c = 1; c < K_NUM_CLASSES; c++) {
         const int max_size_in_class = class_to_size_[c];
         int s;
-        for (s = next_size; s <= max_size_in_class; s += K_ALIGNMENT_SIZE) {
+        for (s = next_size; s <= max_size_in_class; s += K_ALIGNMENT_SIZE){
             class_array_[class_index(s)] = c;
         }
         next_size = max_size_in_class + K_ALIGNMENT_SIZE;
     }
-
 }
 
-int main(int ac, char **av)
+#if 1
+int test(void)
 {
     int i = 0;
     size_t size;
-    init_size_map();
+    //init_size_map();
 
-    for (i = 0; i < 256*1024; i++)
+    for (i = 0; i < 40*1024; i++)
         printf("index[%d] = %d\n", i, class_index(i));
 printf("---\n\n\n");
 
@@ -164,3 +163,4 @@ printf("---\n\n\n");
 
     return 0;
 }
+#endif

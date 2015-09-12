@@ -21,13 +21,16 @@
 
 typedef unsigned char  bool; 
 
+#define  true    1
+#define  false   0
+
 typedef void Sigfunc(int);  /* for signal handlers */    
 
 #define  UL  unsigned long
 
 
 #define  OK         1  /* success */
-#define  NG        -1  /* faliure */
+#define  NG         0  /* faliure */
 
 #define  TRUE       1  /* true  */
 #define  FALSE      0  /* false */

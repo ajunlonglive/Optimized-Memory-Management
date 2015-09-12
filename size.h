@@ -8,25 +8,23 @@
 //2169
 #define   K_CLASS_ARRAY_SIZE ((K_MAX_SIZE + 127 + (120 << 7)) >> 7) + 1
 
-#define   K_PAGE_SHIFT      13 
-#define   K_PAGE_SIZE       1 << K_PAGE_SHIFT
+#define   K_PAGE_SHIFT       13 
+#define   K_PAGE_SIZE        1 << K_PAGE_SHIFT
 
-#define   K_MAX_SIZE   256 * 1024 //256K
+#define   K_MAX_SIZE         40 * 1024 //40K
 #define   K_MAX_SMALL_SIZE   1024
 
-#define   K_ALIGNMENT_SIZE  8     //8b 准线
+#define   K_ALIGNMENT_SIZE   8     //8b 准线
 
-#define   K_NUM_CLASSES     86
+#define   K_NUM_CLASSES      58    //58个分组,最大分组40K
 
 #define   K_ADDR_BITS   (sizeof(void *) < 8 ? (8 * sizeof(void *)) : 48)
-
 
 #define ASSERT(x)                           \
 do {                                        \
      if (!(x))                              \
          debug1_msg("assertion failed");    \
 } while (0)                                 
-
 
 #endif//end __size_h_
 

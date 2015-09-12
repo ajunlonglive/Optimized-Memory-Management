@@ -1,8 +1,10 @@
 #ifndef __MUTEX_H_
 #define __MUTEX_H_
 
-extern bool isthreaded;
+#include <pthread.h>
 
+
+//extern bool isthreaded;
 typedef struct malloc_mutex_s malloc_mutex_t;
 
 #define MALLOC_MUTEX_INITALIZER {PTHREAD_MUTEX_INITIALIZER}
@@ -13,7 +15,8 @@ struct malloc_mutex_s {
     pthread_mutex_t lock;
 };
 
-bool malloc_mutex_init(malloc_mutex_t *mutex);
+
+int malloc_mutex_init(malloc_mutex_t *mutex);
 void malloc_mutex_lock(malloc_mutex_t *mutex);
 void malloc_mutex_unlock(malloc_mutex_t *mutex);
 

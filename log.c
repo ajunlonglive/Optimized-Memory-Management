@@ -46,7 +46,8 @@ static void err_doit(LogLevel _VAL_, const char *fmt, va_list ap)
         fclose(sys_log_fp);
     }
     else
-        fprintf(stdout, "%s\n", buf);
+        fprintf(stdout, "File:<%s> Line<%d> errinfo: %s\n", __FILE__,
+                __LINE__, buf);
     
     return;
 }

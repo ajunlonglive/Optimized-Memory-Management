@@ -1,34 +1,8 @@
 #ifndef	_LINUX_RBTREE_H
 #define	_LINUX_RBTREE_H
 
-#define true    1
-#define false   0
-
-
-#if defined(container_of)
-  #undef container_of
-  #define container_of(ptr, type, member) ({			\
-        const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
-        (type *)( (char *)__mptr - offsetof(type,member) );})
-#else
-  #define container_of(ptr, type, member) ({			\
-        const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
-        (type *)( (char *)__mptr - offsetof(type,member) );})
-#endif
-
-#if defined(offsetof)
-  #undef offsetof
-  #define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
-#else 
-  #define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
-#endif
-
-#undef NULL
-#if defined(__cplusplus)
-  #define NULL 0
-#else
-  #define NULL ((void *)0)
-#endif
+#include "container_of.h"
+#include "hemalloc.h"
 
 /*在Linux系统，32位对齐策略是short地址必须是2的倍数，即地址最后一位必为0
  *同理int 和 long 则要求地址为4的倍数，所以低两位必为0，如果在64位系统上
